@@ -5,6 +5,8 @@ import { TypeOrmModule } from './datasource/typeorm.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ENV_KEYS } from './constants/env.constants';
 import { APP_CONSTANTS } from './constants/app.constants';
+import { GroceriesModule } from './groceries/groceries.module';
+import { LoggerModule } from './common/logger/logger.module';
 
 const getEnvFilePath = (configService: ConfigService): string => {
   switch (configService.get(ENV_KEYS.NODE_ENV)) {
@@ -28,6 +30,8 @@ const getEnvFilePath = (configService: ConfigService): string => {
         }),
       ],
     }),
+    GroceriesModule,
+    LoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
