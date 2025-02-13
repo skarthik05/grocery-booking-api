@@ -7,7 +7,7 @@ import { ENV_KEYS } from './constants/env.constants';
 import { APP_CONSTANTS } from './constants/app.constants';
 import { GroceriesModule } from './groceries/groceries.module';
 import { LoggerModule } from './common/logger/logger.module';
-
+import { UsersModule } from './users/users.module';
 const getEnvFilePath = (configService: ConfigService): string => {
   switch (configService.get(ENV_KEYS.NODE_ENV)) {
     case APP_CONSTANTS.PROD_ENV:
@@ -32,6 +32,7 @@ const getEnvFilePath = (configService: ConfigService): string => {
     }),
     GroceriesModule,
     LoggerModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
