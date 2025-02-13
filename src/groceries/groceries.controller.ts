@@ -13,10 +13,10 @@ import { GroceriesService } from './groceries.service';
 import { CreateGroceryDto } from './dto/create-grocery.dto';
 import { UpdateGroceryDto } from './dto/update-grocery.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ExistsResponseDto, IdResponseDto } from './dto/response.dto';
+import { ExistsResponseDto } from './dto/response.dto';
 import { ExampleResponses } from './responses/example-responses';
 import { ROUTES } from '../constants/app.constants';
-
+import { IdResponseDto } from '../common/dto/api.response.dto';
 @ApiTags(ROUTES.GROCERIES)
 @Controller(ROUTES.GROCERIES)
 export class GroceriesController {

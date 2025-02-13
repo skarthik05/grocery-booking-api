@@ -9,7 +9,7 @@ import {
   ResourceNotFoundException,
 } from 'src/common/exceptions';
 import { CustomLoggerService } from '../common/logger/logger.service';
-
+import { IdResponseDto } from '../common/dto/api.response.dto';
 @Injectable()
 export class GroceriesService {
   constructor(
@@ -19,7 +19,7 @@ export class GroceriesService {
     this.logger.setContext('GroceriesService');
   }
 
-  async create(createGroceryDto: CreateGroceryDto): Promise<{ id: number }> {
+  async create(createGroceryDto: CreateGroceryDto): Promise<IdResponseDto> {
     this.logger.log(`Creating grocery with name: ${createGroceryDto.name}`);
     try {
       await this.validateGroceryName(createGroceryDto.name);
