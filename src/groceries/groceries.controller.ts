@@ -12,10 +12,13 @@ import {
 import { GroceriesService } from './groceries.service';
 import { CreateGroceryDto } from './dto/create-grocery.dto';
 import { UpdateGroceryDto } from './dto/update-grocery.dto';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ExistsResponseDto, IdResponseDto } from './dto/response.dto';
 import { ExampleResponses } from './responses/example-responses';
-@Controller('groceries')
+import { ROUTES } from '../constants/app.constants';
+
+@ApiTags(ROUTES.GROCERIES)
+@Controller(ROUTES.GROCERIES)
 export class GroceriesController {
   constructor(private readonly groceriesService: GroceriesService) {}
   @Get('validate-grocery-name')
