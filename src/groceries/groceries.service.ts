@@ -3,7 +3,7 @@ import { CreateGroceryDto } from './dto/create-grocery.dto';
 import { UpdateGroceryDto } from './dto/update-grocery.dto';
 import { GroceriesRepository } from './groceries.repository';
 import { Grocery } from '../entities/grocery.entity';
-import { ExistsResponseDto } from './dto/response.dto';
+import { ExistsResponseDto } from '../common/dto/api.response.dto';
 import {
   ResourceAlreadyExistsException,
   ResourceNotFoundException,
