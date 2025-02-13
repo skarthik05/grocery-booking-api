@@ -8,4 +8,5 @@ export const ENV_KEYS = {
     NAME: 'DATABASE_NAME',
   },
   NODE_ENV: 'NODE_ENV',
+  BCRYPT_SALT_ROUNDS: 'BCRYPT_SALT_ROUNDS',
 };
