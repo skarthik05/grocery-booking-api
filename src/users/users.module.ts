@@ -11,5 +11,6 @@ import { UserRepository } from './users.repository';
   imports: [TypeOrmModule.forFeature([User]), LoggerModule],
   controllers: [UserController],
   providers: [UserService, UserRepository, BcryptUtil],
+  exports: [UserService],
 })
 export class UsersModule {}

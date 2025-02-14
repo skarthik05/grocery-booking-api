@@ -12,3 +12,8 @@ export interface ICreateUser {
   isActive: boolean;
   role: UserRole;
 }
+
+export interface ILoginUser {
+  email: string;
+  password: string;
+}
