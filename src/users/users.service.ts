@@ -19,6 +19,7 @@ import {
 } from './interfaces/user.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CustomLoggerService } from 'src/common/logger/logger.service';
+import { ITokenPayload } from 'src/auth/interface/token-payload.interface';
 @Injectable()
 export class UserService {
   constructor(
@@ -115,7 +116,7 @@ export class UserService {
     }
   }
 
-  async validateUserCredentials(loginDto: ILoginUser): Promise<User> {
+  async validateUserCredentials(loginDto: ILoginUser): Promise<ITokenPayload> {
     this.logger.log(`Validating credentials for email: ${loginDto.email}`);
     try {
       const user = await this.userRepository.findByEmail(loginDto.email);
@@ -132,7 +133,10 @@ export class UserService {
         throw new InvalidCredentialsException();
       }
 
-      return user;
+      return {
+        id: user.id,
+        role: user.role,
+      };
     } catch (error) {
       this.logger.customError('Failed to validate user credentials', error);
       throw error;

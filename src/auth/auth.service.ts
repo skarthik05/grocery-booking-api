@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SignInDto } from './dto/signin-auth.dto';
 import { UserService } from 'src/users/users.service';
-import { User } from 'src/entities/user.entity';
 import { CustomLoggerService } from 'src/common/logger/logger.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -18,14 +17,17 @@ export class AuthService {
   ) {}
   async signin(createAuthDto: SignInDto): Promise<string> {
     const user = await this.usersService.validateUserCredentials(createAuthDto);
-    return this.getCookieWithJwtToken(user.id);
+    return this.getCookieWithJwtToken({ id: user.id, role: user.role });
   }
 
   signup(createUserDto: CreateUserDto): Promise<IdResponseDto> {
     return this.usersService.createUser(createUserDto);
   }
 
-  async getAuthenticatedUser(email: string, password: string): Promise<User> {
+  async getAuthenticatedUser(
+    email: string,
+    password: string,
+  ): Promise<ITokenPayload> {
     try {
       this.logger.log(`Authenticating user with email: ${email}`);
       return await this.usersService.validateUserCredentials({
@@ -37,8 +39,8 @@ export class AuthService {
       throw error;
     }
   }
-  getCookieWithJwtToken(userId: number) {
-    const payload: ITokenPayload = { userId };
+  getCookieWithJwtToken(input: ITokenPayload) {
+    const payload: ITokenPayload = input;
     const token = this.jwtService.sign(payload);
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get('JWT_EXPIRATION_TIME')}`;
   }
