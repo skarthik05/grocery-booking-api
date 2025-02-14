@@ -17,3 +17,9 @@ export class InvalidDataException extends HttpException {
     super(message, HttpStatus.BAD_REQUEST);
   }
 }
+
+export class InvalidCredentialsException extends HttpException {
+  constructor() {
+    super('Invalid credentials', HttpStatus.UNAUTHORIZED);
+  }
+}
