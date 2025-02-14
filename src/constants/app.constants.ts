@@ -5,4 +5,5 @@ export const APP_CONSTANTS = {
 export const ROUTES = {
   GROCERIES: 'groceries',
   USERS: 'users',
+  AUTH: 'auth',
 };
