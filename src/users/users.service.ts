@@ -10,8 +10,13 @@ import { BcryptUtil } from 'src/utils/bcrypt.util';
 import {
   ResourceAlreadyExistsException,
   ResourceNotFoundException,
+  InvalidCredentialsException,
 } from 'src/common/exceptions';
-import { IValidateUser, ICreateUser } from './interfaces/user.interface';
+import {
+  IValidateUser,
+  ICreateUser,
+  ILoginUser,
+} from './interfaces/user.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CustomLoggerService } from 'src/common/logger/logger.service';
 @Injectable()
@@ -106,6 +111,30 @@ export class UserService {
       return await this.userRepository.update(id, updateUserDto);
     } catch (error) {
       this.logger.customError('Failed to update user', error);
+      throw error;
+    }
+  }
+
+  async validateUserCredentials(loginDto: ILoginUser): Promise<User> {
+    this.logger.log(`Validating credentials for email: ${loginDto.email}`);
+    try {
+      const user = await this.userRepository.findByEmail(loginDto.email);
+      if (!user) {
+        throw new ResourceNotFoundException('User');
+      }
+
+      const hashedPassword = await this.bcryptUtil.hashPassword(
+        loginDto.password,
+        user.salt,
+      );
+
+      if (hashedPassword !== user.password) {
+        throw new InvalidCredentialsException();
+      }
+
+      return user;
+    } catch (error) {
+      this.logger.customError('Failed to validate user credentials', error);
       throw error;
     }
   }
