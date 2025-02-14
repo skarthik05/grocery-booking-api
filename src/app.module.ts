@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from './datasource/typeorm.module';
@@ -8,6 +9,8 @@ import { APP_CONSTANTS } from './constants/app.constants';
 import { GroceriesModule } from './groceries/groceries.module';
 import { LoggerModule } from './common/logger/logger.module';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import JwtAuthGuard from './auth/jwt-auth.guard';
 const getEnvFilePath = (configService: ConfigService): string => {
   switch (configService.get(ENV_KEYS.NODE_ENV)) {
     case APP_CONSTANTS.PROD_ENV:
@@ -33,8 +36,15 @@ const getEnvFilePath = (configService: ConfigService): string => {
     GroceriesModule,
     LoggerModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class AppModule {}
