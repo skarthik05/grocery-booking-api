@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ENV_KEYS } from './constants/env.constants';
 import { APP_CONSTANTS } from './constants/app.constants';
 import { GroceriesModule } from './groceries/groceries.module';
+import { OrdersModule } from './orders/orders.module';
 import { LoggerModule } from './common/logger/logger.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
@@ -35,6 +36,7 @@ const getEnvFilePath = (configService: ConfigService): string => {
       ],
     }),
     GroceriesModule,
+    OrdersModule,
     LoggerModule,
     UsersModule,
     AuthModule,
