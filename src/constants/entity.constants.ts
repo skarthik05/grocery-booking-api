@@ -4,6 +4,17 @@ export const ENTITY_CONSTANTS = {
   GROCERY_NAME_UNIQUE: { unique: true },
   GROCERY_PRICE: { type: 'decimal', precision: 10, scale: 2 } as ColumnOptions,
   GROCERY_QUANTITY: { type: 'int', default: 0 } as ColumnOptions,
+  ORDER_TOTAL_PRICE: {
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+  } as ColumnOptions,
+  ORDER_ITEM_QUANTITY: { type: 'int' } as ColumnOptions,
+  ORDER_ITEM_SUBTOTAL: {
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+  } as ColumnOptions,
   TABLE_NAMES: {
     GROCERY: 'groceries',
     USER: 'users',
