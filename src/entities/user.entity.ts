@@ -1,6 +1,7 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { ENTITY_CONSTANTS } from 'src/constants/entity.constants';
+import { Order } from './order.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -30,4 +31,7 @@ export class User extends BaseEntity {
 
   @Column({ select: false })
   salt: string;
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }
