@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ILike, Repository } from 'typeorm';
+import { ILike, In, QueryRunner, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Grocery } from '../entities/grocery.entity';
 import { CreateGroceryDto } from './dto/create-grocery.dto';
 import { UpdateGroceryDto } from './dto/update-grocery.dto';
-
+import { OrderItem } from 'src/entities/order-item.entity';
 @Injectable()
 export class GroceriesRepository {
   constructor(
@@ -44,5 +44,26 @@ export class GroceriesRepository {
       where: { name: ILike(name) },
     });
     return !!grocery;
+  }
+  async findByIds(ids: number[]): Promise<Grocery[]> {
+    return await this.repository.find({ where: { id: In(ids) } });
+  }
+
+  async bulkDecrementStock(
+    items: OrderItem[],
+    queryRunner: QueryRunner,
+  ): Promise<void> {
+    const caseQuery = items
+      .map(
+        (item) =>
+          `WHEN id = ${item.grocery.id} THEN quantity - ${item.quantity}`,
+      )
+      .join(' ');
+
+    await queryRunner.manager.query(`
+      UPDATE groceries
+      SET quantity = CASE ${caseQuery} END
+      WHERE id IN (${items.map((i) => i.grocery.id).join(',')}) AND quantity >= 0;
+    `);
   }
 }

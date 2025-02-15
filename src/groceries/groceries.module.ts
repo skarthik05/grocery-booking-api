@@ -9,5 +9,6 @@ import { Grocery } from '../entities/grocery.entity';
   imports: [TypeOrmModule.forFeature([Grocery])],
   controllers: [GroceriesController],
   providers: [GroceriesService, GroceriesRepository],
+  exports: [GroceriesService, GroceriesRepository],
 })
 export class GroceriesModule {}
