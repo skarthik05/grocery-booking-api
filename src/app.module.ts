@@ -11,7 +11,7 @@ import { LoggerModule } from './common/logger/logger.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import JwtAuthGuard from './auth/jwt-auth.guard';
-import { RolesGuard } from './common/decorators/guards/roles.guard';
+import { RolesGuard } from './common/guards/roles.guard';
 const getEnvFilePath = (configService: ConfigService): string => {
   switch (configService.get(ENV_KEYS.NODE_ENV)) {
     case APP_CONSTANTS.PROD_ENV:
