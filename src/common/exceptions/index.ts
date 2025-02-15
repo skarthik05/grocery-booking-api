@@ -23,3 +23,12 @@ export class InvalidCredentialsException extends HttpException {
     super('Invalid credentials', HttpStatus.UNAUTHORIZED);
   }
 }
+
+export class InsufficientStockException extends HttpException {
+  constructor(groceryName: string) {
+    super(
+      `Insufficient stock for grocery item ${groceryName}`,
+      HttpStatus.BAD_REQUEST,
+    );
+  }
+}
