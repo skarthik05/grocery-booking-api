@@ -10,11 +10,13 @@ import {
 } from 'src/common/exceptions';
 import { CustomLoggerService } from '../common/logger/logger.service';
 import { IdResponseDto } from '../common/dto/api.response.dto';
+import { SearchService } from 'src/search/search.service';
 @Injectable()
 export class GroceriesService {
   constructor(
     private readonly groceriesRepository: GroceriesRepository,
     private readonly logger: CustomLoggerService,
+    private readonly searchService: SearchService,
   ) {
     this.logger.setContext('GroceriesService');
   }
@@ -25,7 +27,8 @@ export class GroceriesService {
       await this.validateGroceryName(createGroceryDto.name);
       const result = await this.groceriesRepository.create(createGroceryDto);
       this.logger.log(`Created grocery with ID: ${result.id}`);
-      return result;
+      await this.searchService.indexGrocery(result as Grocery);
+      return { id: result.id };
     } catch (error) {
       this.logger.customError('Failed to create grocery', error.stack);
       throw error;
@@ -68,22 +71,27 @@ export class GroceriesService {
         throw new ResourceNotFoundException('Grocery');
       }
       this.logger.log(`Updating grocery with ID: ${id}`);
-      return this.groceriesRepository.update(id, updateGroceryDto);
+      Object.assign(grocery, updateGroceryDto);
+      await this.searchService.updateGrocery(grocery);
+      return this.groceriesRepository.update(id, grocery);
     } catch (error) {
       this.logger.customError('Failed to update grocery', error.stack);
       throw error;
     }
   }
 
-  async remove(id: number): Promise<Grocery> {
+  async remove(id: number): Promise<void> {
     try {
       const grocery = await this.groceriesRepository.findOne(id);
       if (!grocery) {
         this.logger.log(`Grocery with ID: ${id} not found`);
         throw new ResourceNotFoundException('Grocery');
       }
-      this.logger.log(`Removing grocery with ID: ${id}`);
-      return this.groceriesRepository.remove(id);
+      this.logger.log(`Removing grocery with ID: ${id} from elasticsearch`);
+      await this.searchService.deleteGrocery(id);
+      this.logger.log(`Removing grocery with ID: ${id} from database`);
+      await this.groceriesRepository.remove(id);
+      return null;
     } catch (error) {
       this.logger.customError('Failed to remove grocery', error.stack);
       throw error;
@@ -99,6 +107,42 @@ export class GroceriesService {
       this.logger.log(`Grocery name: ${name} is available`);
       return { isExists: false };
     } catch (error) {
+      throw error;
+    }
+  }
+  async searchGroceries(query: string): Promise<Grocery[]> {
+    try {
+      this.logger.log(`Searching groceries with query: ${query}`);
+      const result = await this.searchService.searchGroceries(query);
+      if (result.length === 0) {
+        this.logger.log(
+          `No groceries found for query: ${query} in elasticsearch, searching in database`,
+        );
+        return await this.groceriesRepository.searchGroceries(query);
+      }
+
+      return result;
+    } catch (error) {
+      this.logger.customError('Failed to search groceries', error.stack);
+      throw error;
+    }
+  }
+  async indexAllGroceries(): Promise<void> {
+    try {
+      this.logger.log('fetching all groceries from database');
+      const groceries = await this.groceriesRepository.findAll();
+      this.logger.log(
+        `indexing ${groceries.length} groceries in elasticsearch`,
+      );
+      const elasticsearchGroceries = groceries.map((grocery) => ({
+        id: grocery.id,
+        name: grocery.name,
+      }));
+      await this.searchService.indexGroceries(elasticsearchGroceries as Grocery[]);
+      this.logger.log('groceries indexed in elasticsearch');
+      this.logger.log(`Successfully indexed ${groceries.length} groceries`);
+    } catch (error) {
+      this.logger.customError('Failed to index groceries', error.stack);
       throw error;
     }
   }

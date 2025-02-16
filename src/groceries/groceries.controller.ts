@@ -17,10 +17,21 @@ import { ExampleResponses } from './responses/example-responses';
 import { ROUTES } from '../constants/app.constants';
 import { IdResponseDto } from '../common/dto/api.response.dto';
 import { ExistsResponseDto } from '../common/dto/api.response.dto';
+import { Grocery } from 'src/entities/grocery.entity';
 @ApiTags(ROUTES.GROCERIES)
 @Controller(ROUTES.GROCERIES)
 export class GroceriesController {
   constructor(private readonly groceriesService: GroceriesService) {}
+
+  @Post('elasticsearch/index')
+  @ApiResponse({
+    status: 200,
+    description: 'To index all groceries to Elasticsearch',
+  })
+  async indexAllGroceries() {
+    await this.groceriesService.indexAllGroceries();
+    return { message: 'All groceries indexed successfully' };
+  }
   @Get('validate-grocery-name')
   @ApiResponse({
     status: 200,
@@ -39,6 +50,18 @@ export class GroceriesController {
   @ApiResponse({ status: 400, description: 'Grocery name already exists' })
   validateGroceryName(@Query('name') name: string): Promise<ExistsResponseDto> {
     return this.groceriesService.validateGroceryName(name);
+  }
+
+  @Get('search')
+  @ApiResponse({
+    status: 200,
+    description: 'To search groceries in Elasticsearch',
+    schema: {
+      example: ExampleResponses.searchGroceriesSuccess,
+    },
+  })
+  searchGroceries(@Query('q') query: string): Promise<Grocery[]> {
+    return this.groceriesService.searchGroceries(query);
   }
 
   @Post()

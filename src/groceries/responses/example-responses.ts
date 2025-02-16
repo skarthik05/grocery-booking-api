@@ -55,4 +55,8 @@ export const ExampleResponses = {
     status: 'success',
     data: { status: true },
   },
+  searchGroceriesSuccess: {
+    status: 'success',
+    data: [{ id: 1, name: 'Grocery 1', price: 100, quantity: 100 }],
+  },
 };
