@@ -1,18 +1,32 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Headers } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { ApiBadRequestResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiHeader,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ExampleOrderResponses } from './responses/example-order-responses';
 import { ROUTES } from '../constants/app.constants';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { IdResponseDto } from 'src/common/dto/api.response.dto';
+import { RedisService } from 'src/common/services/redis/redis.service';
 
 @ApiTags(ROUTES.ORDERS)
 @Controller(ROUTES.ORDERS)
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly ordersService: OrdersService,
+    private readonly redisService: RedisService,
+  ) {}
 
   @Post()
+  @ApiHeader({
+    name: 'idempotency-key',
+    required: true,
+    description: 'Unique key to prevent duplicate order creation',
+  })
   @ApiResponse({
     status: 201,
     description: 'Order created successfully',
@@ -42,7 +56,12 @@ export class OrdersController {
   async create(
     @Body() createOrderDto: CreateOrderDto,
     @CurrentUser('id') id: number,
+    @Headers('idempotency-key') idempotencyKey: string,
   ): Promise<IdResponseDto> {
-    return this.ordersService.createOrder(createOrderDto, id);
+    const idempotencyKeyData = await this.redisService.get(idempotencyKey);
+    if (idempotencyKeyData) {
+      return { id: idempotencyKeyData };
+    }
+    return this.ordersService.createOrder(createOrderDto, id, idempotencyKey);
   }
 }

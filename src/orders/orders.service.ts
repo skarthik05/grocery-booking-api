@@ -12,12 +12,14 @@ import {
 } from 'src/common/exceptions';
 import { GroceriesRepository } from 'src/groceries/groceries.repository';
 import { CustomLoggerService } from 'src/common/logger/logger.service';
+import { RedisService } from 'src/common/services/redis/redis.service';
 @Injectable()
 export class OrdersService {
   constructor(
     private readonly ordersRepository: OrdersRepository,
     private readonly groceriesRepository: GroceriesRepository,
     private readonly logger: CustomLoggerService,
+    private readonly redisService: RedisService,
   ) {}
 
   async validateAndCalculateTotal(
@@ -57,6 +59,7 @@ export class OrdersService {
   async createOrder(
     createOrderDto: CreateOrderDto,
     id: number,
+    idempotencyKey: string,
   ): Promise<IdResponseDto> {
     this.logger.log('Creating order');
     try {
@@ -84,6 +87,7 @@ export class OrdersService {
       const newOrder =
         await this.ordersRepository.createOrderWithTransaction(order);
       this.logger.log('Order created successfully');
+      await this.redisService.set(idempotencyKey, newOrder.id);
       return { id: newOrder.id };
     } catch (error) {
       this.logger.error('Error creating order');
