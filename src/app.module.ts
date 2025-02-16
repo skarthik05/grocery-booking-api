@@ -13,6 +13,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import JwtAuthGuard from './auth/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
+import { SearchModule } from './search/search.module';
 const getEnvFilePath = (configService: ConfigService): string => {
   switch (configService.get(ENV_KEYS.NODE_ENV)) {
     case APP_CONSTANTS.PROD_ENV:
@@ -40,6 +41,7 @@ const getEnvFilePath = (configService: ConfigService): string => {
     LoggerModule,
     UsersModule,
     AuthModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [
