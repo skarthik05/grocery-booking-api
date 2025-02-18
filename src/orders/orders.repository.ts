@@ -41,4 +41,13 @@ export class OrdersRepository {
       await queryRunner.release();
     }
   }
+  async findUserOrders(id: number): Promise<Order[]> {
+    this.logger.log('Finding orders for user ' + id);
+    const orders = await this.repository.find({
+      where: { user: { id } },
+      relations: ['items', 'items.grocery'],
+    });
+    this.logger.log('Orders retrieved successfully');
+    return orders;
+  }
 }

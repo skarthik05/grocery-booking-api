@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Headers } from '@nestjs/common';
+import { Controller, Post, Body, Headers, Get } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import {
@@ -25,6 +25,20 @@ export class OrdersController {
     private readonly redisService: RedisService,
   ) {}
 
+  @Get('my-orders')
+  @ApiResponse({
+    status: 200,
+    description: 'Orders retrieved successfully',
+    schema: { example: ExampleOrderResponses.findAllOrdersSuccess },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'No orders found',
+    schema: { example: ExampleOrderResponses.findAllOrdersEmpty },
+  })
+  getMyOrders(@CurrentUser('id') id: number) {
+    return this.ordersService.getOrders(id);
+  }
   @Post()
   @ApiHeader({
     name: 'idempotency-key',

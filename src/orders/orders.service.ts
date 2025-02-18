@@ -22,6 +22,18 @@ export class OrdersService {
     private readonly redisService: RedisService,
   ) {}
 
+  async getOrders(id: number) {
+    try {
+      this.logger.log('Getting orders for user ' + id);
+      const orders = await this.ordersRepository.findUserOrders(id);
+      this.logger.log('Orders retrieved successfully');
+      return orders;
+    } catch (error) {
+      this.logger.error('Error getting orders');
+      throw error;
+    }
+  }
+
   async validateAndCalculateTotal(
     items: CreateOrderItemDto[],
   ): Promise<number> {
