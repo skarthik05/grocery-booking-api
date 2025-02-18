@@ -14,7 +14,9 @@ import { IdResponseDto } from 'src/common/dto/api.response.dto';
 import { RedisService } from 'src/common/services/redis/redis.service';
 import { ALL_ROLES } from 'src/constants/app.constants';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { ApiCookieAuth } from '@nestjs/swagger';
 
+@ApiCookieAuth()
 @ApiTags(ROUTES.ORDERS)
 @Controller(ROUTES.ORDERS)
 export class OrdersController {

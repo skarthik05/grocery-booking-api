@@ -18,6 +18,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { APP_CONSTANTS } from 'src/constants/app.constants';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { ApiCookieAuth } from '@nestjs/swagger';
+
+@ApiCookieAuth()
 @ApiTags(ROUTES.USERS)
 @Controller(ROUTES.USERS)
 export class UserController {

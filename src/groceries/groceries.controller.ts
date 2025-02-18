@@ -20,6 +20,9 @@ import { ExistsResponseDto } from '../common/dto/api.response.dto';
 import { Grocery } from 'src/entities/grocery.entity';
 import { ALL_ROLES } from 'src/constants/app.constants';
 import { Roles } from 'src/common/decorators/roles.decorator';
+import { ApiCookieAuth } from '@nestjs/swagger';
+
+@ApiCookieAuth()
 @ApiTags(ROUTES.GROCERIES)
 @Controller(ROUTES.GROCERIES)
 export class GroceriesController {
