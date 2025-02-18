@@ -30,7 +30,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Grocery API')
-    .setDescription('API for managing groceries')
+    .setDescription('API for managing groceries. Most endpoints require authentication.')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
