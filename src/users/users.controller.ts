@@ -15,12 +15,15 @@ import { ROUTES } from '../constants/app.constants';
 import { IdResponseDto } from 'src/common/dto/api.response.dto';
 import { UserResponses } from './responses/user.response';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import { APP_CONSTANTS } from 'src/constants/app.constants';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 @ApiTags(ROUTES.USERS)
 @Controller(ROUTES.USERS)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Roles(APP_CONSTANTS.ADMIN)
   @ApiResponse({
     status: 201,
     description: 'User created successfully',
@@ -40,6 +43,7 @@ export class UserController {
     return this.userService.createUser(createUserDto);
   }
 
+  @Roles(APP_CONSTANTS.ADMIN)
   @ApiResponse({
     status: 200,
     description: 'User found successfully',
@@ -59,6 +63,7 @@ export class UserController {
     return this.userService.findUserById(id);
   }
 
+  @Roles(APP_CONSTANTS.ADMIN)
   @ApiResponse({
     status: 200,
     description: 'All users found successfully',
@@ -85,13 +90,16 @@ export class UserController {
       example: UserResponses.findOneError,
     },
   })
+  @Roles(APP_CONSTANTS.ADMIN)
   @Patch(':id')
   async update(
-    @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
+    @CurrentUser('id') userId: number,
   ): Promise<User> {
-    return this.userService.updateUser(id, updateUserDto);
+    return this.userService.updateUser(userId, updateUserDto);
   }
+
+  @Roles(APP_CONSTANTS.ADMIN)
   @ApiResponse({
     status: 200,
     description: 'User deleted successfully',

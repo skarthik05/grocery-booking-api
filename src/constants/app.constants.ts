@@ -10,3 +10,4 @@ export const ROUTES = {
   AUTH: 'auth',
   ORDERS: 'orders',
 };
+export const ALL_ROLES = [APP_CONSTANTS.ADMIN, APP_CONSTANTS.USER];

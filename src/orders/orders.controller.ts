@@ -12,6 +12,8 @@ import { ROUTES } from '../constants/app.constants';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { IdResponseDto } from 'src/common/dto/api.response.dto';
 import { RedisService } from 'src/common/services/redis/redis.service';
+import { ALL_ROLES } from 'src/constants/app.constants';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @ApiTags(ROUTES.ORDERS)
 @Controller(ROUTES.ORDERS)
@@ -53,6 +55,7 @@ export class OrdersController {
       },
     },
   })
+  @Roles(...ALL_ROLES)
   async create(
     @Body() createOrderDto: CreateOrderDto,
     @CurrentUser('id') id: number,

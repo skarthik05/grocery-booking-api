@@ -138,7 +138,9 @@ export class GroceriesService {
         id: grocery.id,
         name: grocery.name,
       }));
-      await this.searchService.indexGroceries(elasticsearchGroceries as Grocery[]);
+      await this.searchService.indexGroceries(
+        elasticsearchGroceries as Grocery[],
+      );
       this.logger.log('groceries indexed in elasticsearch');
       this.logger.log(`Successfully indexed ${groceries.length} groceries`);
     } catch (error) {

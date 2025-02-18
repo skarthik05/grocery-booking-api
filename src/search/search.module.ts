@@ -38,4 +38,3 @@ export class SearchModule implements OnModuleInit {
     await this.searchService.checkConnection();
   }
 }
-

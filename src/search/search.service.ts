@@ -13,7 +13,6 @@ export class SearchService {
   constructor(
     private readonly logger: CustomLoggerService,
     private readonly configService: ConfigService,
-    
   ) {
     this.indexName = this.configService.get(ENV_KEYS.ELASTICSEARCH_INDEX);
     this.elasticsearchService = new ElasticsearchService({

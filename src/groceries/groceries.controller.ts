@@ -14,15 +14,18 @@ import { CreateGroceryDto } from './dto/create-grocery.dto';
 import { UpdateGroceryDto } from './dto/update-grocery.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ExampleResponses } from './responses/example-responses';
-import { ROUTES } from '../constants/app.constants';
+import { APP_CONSTANTS, ROUTES } from '../constants/app.constants';
 import { IdResponseDto } from '../common/dto/api.response.dto';
 import { ExistsResponseDto } from '../common/dto/api.response.dto';
 import { Grocery } from 'src/entities/grocery.entity';
+import { ALL_ROLES } from 'src/constants/app.constants';
+import { Roles } from 'src/common/decorators/roles.decorator';
 @ApiTags(ROUTES.GROCERIES)
 @Controller(ROUTES.GROCERIES)
 export class GroceriesController {
   constructor(private readonly groceriesService: GroceriesService) {}
 
+  @Roles(APP_CONSTANTS.ADMIN)
   @Post('elasticsearch/index')
   @ApiResponse({
     status: 200,
@@ -32,6 +35,8 @@ export class GroceriesController {
     await this.groceriesService.indexAllGroceries();
     return { message: 'All groceries indexed successfully' };
   }
+
+  @Roles(...ALL_ROLES)
   @Get('validate-grocery-name')
   @ApiResponse({
     status: 200,
@@ -52,6 +57,7 @@ export class GroceriesController {
     return this.groceriesService.validateGroceryName(name);
   }
 
+  @Roles(...ALL_ROLES)
   @Get('search')
   @ApiResponse({
     status: 200,
@@ -64,6 +70,7 @@ export class GroceriesController {
     return this.groceriesService.searchGroceries(query);
   }
 
+  @Roles(APP_CONSTANTS.ADMIN)
   @Post()
   @ApiResponse({
     status: 201,
@@ -83,6 +90,7 @@ export class GroceriesController {
     return this.groceriesService.create(createGroceryDto);
   }
 
+  @Roles(...ALL_ROLES)
   @Get()
   @ApiResponse({
     status: 200,
@@ -95,6 +103,7 @@ export class GroceriesController {
     return this.groceriesService.findAll();
   }
 
+  @Roles(...ALL_ROLES)
   @Get(':id')
   @ApiResponse({
     status: 200,
@@ -114,6 +123,7 @@ export class GroceriesController {
     return this.groceriesService.findOne(id);
   }
 
+  @Roles(APP_CONSTANTS.ADMIN)
   @Patch(':id')
   @ApiResponse({
     status: 200,
@@ -136,6 +146,7 @@ export class GroceriesController {
     return this.groceriesService.update(id, updateGroceryDto);
   }
 
+  @Roles(APP_CONSTANTS.ADMIN)
   @Delete(':id')
   @ApiResponse({
     status: 200,
