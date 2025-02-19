@@ -73,4 +73,12 @@ export const ExampleOrderResponses = {
     status: 'success',
     data: { status: true },
   },
+  cancelOrderSuccess: {
+    status: 'success',
+    message: 'Order cancelled successfully',
+  },
+  cancelOrderError: {
+    status: 'error',
+    error: 'Order cannot be cancelled. Only pending orders can be cancelled.',
+  },
 };

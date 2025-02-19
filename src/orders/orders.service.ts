@@ -9,10 +9,14 @@ import { IdResponseDto } from 'src/common/dto/api.response.dto';
 import {
   InsufficientStockException,
   ResourceNotFoundException,
+  InvalidDataException,
 } from 'src/common/exceptions';
 import { GroceriesRepository } from 'src/groceries/groceries.repository';
 import { CustomLoggerService } from 'src/common/logger/logger.service';
 import { RedisService } from 'src/common/services/redis/redis.service';
+import { ORDER_STATUS } from './constants/order.constants';
+import { CancelOrderDto } from './dto/cancel-order.dto';
+import { MessageResponseDto } from 'src/common/dto/api.response.dto';
 @Injectable()
 export class OrdersService {
   constructor(
@@ -22,10 +26,12 @@ export class OrdersService {
     private readonly redisService: RedisService,
   ) {}
 
-  async getOrders(id: number) {
+  async getOrders(userId: number) {
     try {
-      this.logger.log('Getting orders for user ' + id);
-      const orders = await this.ordersRepository.findUserOrders(id);
+      this.logger.log('Getting orders for user ' + userId);
+      const orders = await this.ordersRepository.findOrderWithItems({
+        userId,
+      });
       this.logger.log('Orders retrieved successfully');
       return orders;
     } catch (error) {
@@ -87,6 +93,7 @@ export class OrdersService {
       const order = Object.assign(new Order(), {
         user: { id } as User,
         totalPrice,
+        status: ORDER_STATUS.PENDING,
         items: createOrderDto.items.map((item) =>
           Object.assign(new OrderItem(), {
             grocery: { id: item.groceryId } as Grocery,
@@ -100,9 +107,45 @@ export class OrdersService {
         await this.ordersRepository.createOrderWithTransaction(order);
       this.logger.log('Order created successfully');
       await this.redisService.set(idempotencyKey, newOrder.id);
-      return { id: newOrder.id };
+      return {
+        id: newOrder.id,
+        message: 'your order has been created successfully',
+      };
     } catch (error) {
       this.logger.error('Error creating order');
+      throw error;
+    }
+  }
+
+  async cancelOrder(
+    orderId: number,
+    cancelOrderDto: CancelOrderDto,
+    userId: number,
+  ): Promise<MessageResponseDto> {
+    this.logger.log(`Cancelling order ${orderId} for user ${userId}`);
+
+    try {
+      const order = await this.ordersRepository.findOrderWithItems({
+        id: orderId,
+        userId,
+      });
+
+      if (!order.length) {
+        throw new ResourceNotFoundException('Order');
+      }
+
+      if (order[0].status !== ORDER_STATUS.PENDING) {
+        throw new InvalidDataException('Only pending orders can be cancelled');
+      }
+
+      await this.ordersRepository.cancelOrder(order[0], cancelOrderDto.reason);
+
+      this.logger.log(`Order ${orderId} cancelled successfully`);
+      return {
+        message: 'your order has been cancelled successfully',
+      };
+    } catch (error) {
+      this.logger.customError(`Failed to cancel order ${orderId}`, error.stack);
       throw error;
     }
   }

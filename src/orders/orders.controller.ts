@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Headers, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  Get,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import {
@@ -6,6 +14,7 @@ import {
   ApiHeader,
   ApiResponse,
   ApiTags,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { ExampleOrderResponses } from './responses/example-order-responses';
 import { ROUTES } from '../constants/app.constants';
@@ -15,7 +24,8 @@ import { RedisService } from 'src/common/services/redis/redis.service';
 import { ALL_ROLES } from 'src/constants/app.constants';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { ApiCookieAuth } from '@nestjs/swagger';
-
+import { CancelOrderDto } from './dto/cancel-order.dto';
+import { MessageResponseDto } from 'src/common/dto/api.response.dto';
 @ApiCookieAuth()
 @ApiTags(ROUTES.ORDERS)
 @Controller(ROUTES.ORDERS)
@@ -82,5 +92,31 @@ export class OrdersController {
       return { id: idempotencyKeyData };
     }
     return this.ordersService.createOrder(createOrderDto, id, idempotencyKey);
+  }
+
+  @Post(':id/cancel')
+  @ApiOperation({ summary: 'Cancel an order' })
+  @ApiResponse({
+    status: 200,
+    description: 'Order cancelled successfully',
+    schema: { example: ExampleOrderResponses.cancelOrderSuccess },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Order cannot be cancelled',
+    schema: { example: ExampleOrderResponses.cancelOrderError },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Order not found',
+    schema: { example: ExampleOrderResponses.findOrderError },
+  })
+  @Roles(...ALL_ROLES)
+  async cancelOrder(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() cancelOrderDto: CancelOrderDto,
+    @CurrentUser('id') userId: number,
+  ): Promise<MessageResponseDto> {
+    return this.ordersService.cancelOrder(id, cancelOrderDto, userId);
   }
 }
