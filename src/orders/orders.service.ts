@@ -110,7 +110,7 @@ export class OrdersService {
       await this.redisService.set(idempotencyKey, newOrder.id);
       return {
         id: newOrder.id,
-        message: 'your order has been created successfully',
+        message: 'your order has been created and will be processed soon',
       };
     } catch (error) {
       this.logger.error('Error creating order');
