@@ -1,4 +1,8 @@
-import { createParamDecorator, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ITokenPayload } from 'src/auth/interface/token-payload.interface';
 export const CurrentUser = createParamDecorator(
   (data: keyof ITokenPayload, ctx: ExecutionContext) => {
