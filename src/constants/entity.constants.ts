@@ -1,3 +1,4 @@
+import { ORDER_STATUS } from 'src/orders/constants/order.constants';
 import { ColumnOptions } from 'typeorm';
 
 export const ENTITY_CONSTANTS = {
@@ -20,5 +21,11 @@ export const ENTITY_CONSTANTS = {
     USER: 'users',
     ORDER: 'orders',
     ORDER_ITEM: 'order_items',
+    ORDER_CANCELLATION: 'order_cancellations',
   },
+  ORDER_STATUS: {
+    type: 'enum',
+    enum: ORDER_STATUS,
+    default: ORDER_STATUS.PENDING,
+  } as ColumnOptions,
 };
