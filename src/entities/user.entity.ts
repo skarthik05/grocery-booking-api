@@ -2,11 +2,7 @@ import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { ENTITY_CONSTANTS } from 'src/constants/entity.constants';
 import { Order } from './order.entity';
-
-export enum UserRole {
-  ADMIN = 'admin',
-  USER = 'user',
-}
+import { USER_ROLE } from 'src/users/constants/user.constants';
 
 @Entity(ENTITY_CONSTANTS.TABLE_NAMES.USER)
 export class User extends BaseEntity {
@@ -19,12 +15,8 @@ export class User extends BaseEntity {
   @Column({ select: false })
   password: string;
 
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.USER,
-  })
-  role: UserRole;
+  @Column(ENTITY_CONSTANTS.USER_ROLE)
+  role: USER_ROLE;
 
   @Column({ default: false })
   isActive: boolean;

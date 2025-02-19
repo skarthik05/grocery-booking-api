@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { UserRole } from 'src/entities/user.entity';
+import { USER_ROLE } from 'src/users/constants/user.constants';
 export class UpdateUserDto extends PartialType(
   OmitType(CreateUserDto, ['password']),
 ) {
@@ -17,7 +17,7 @@ export class UpdateUserDto extends PartialType(
     required: false,
     example: 'admin',
   })
-  role?: UserRole;
+  role?: USER_ROLE;
 
   @ApiProperty({
     description: 'Email of the user',

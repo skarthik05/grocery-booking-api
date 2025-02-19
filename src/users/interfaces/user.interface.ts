@@ -1,4 +1,4 @@
-import { UserRole } from 'src/entities/user.entity';
+import { USER_ROLE } from 'src/users/constants/user.constants';
 
 export interface IValidateUser {
   email: string;
@@ -10,7 +10,7 @@ export interface ICreateUser {
   password: string;
   salt: string;
   isActive: boolean;
-  role: UserRole;
+  role: USER_ROLE;
 }
 
 export interface ILoginUser {
