@@ -1,6 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
-export class IdResponseDto {
+export class MessageResponseDto {
+  @ApiProperty({ description: 'The message of the response' })
+  message: string;
+}
+export class IdResponseDto extends PartialType(MessageResponseDto) {
   @ApiProperty({ description: 'The ID of the created grocery item' })
   id: number;
 }
