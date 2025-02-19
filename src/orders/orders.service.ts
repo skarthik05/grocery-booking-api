@@ -17,6 +17,7 @@ import { RedisService } from 'src/common/services/redis/redis.service';
 import { ORDER_STATUS } from './constants/order.constants';
 import { CancelOrderDto } from './dto/cancel-order.dto';
 import { MessageResponseDto } from 'src/common/dto/api.response.dto';
+import { ApproveOrderDto } from './dto/approve-order.dto';
 @Injectable()
 export class OrdersService {
   constructor(
@@ -146,6 +147,42 @@ export class OrdersService {
       };
     } catch (error) {
       this.logger.customError(`Failed to cancel order ${orderId}`, error.stack);
+      throw error;
+    }
+  }
+
+  async updateOrderStatus(
+    orderId: number,
+    approveOrderDto: ApproveOrderDto,
+  ): Promise<MessageResponseDto> {
+    this.logger.log(
+      `Updating order ${orderId} status to ${approveOrderDto.status}`,
+    );
+
+    try {
+      const order = await this.ordersRepository.findOrderWithItems({
+        id: orderId,
+      });
+
+      if (!order.length) {
+        throw new ResourceNotFoundException('Order');
+      }
+
+      if (order[0].status !== ORDER_STATUS.PENDING) {
+        throw new InvalidDataException('Can only update pending orders');
+      }
+      order[0].status = approveOrderDto.status;
+      await this.ordersRepository.updateOrderStatus(order[0]);
+
+      this.logger.log(`Order ${orderId} status updated successfully`);
+      return {
+        message: 'Order status updated successfully',
+      };
+    } catch (error) {
+      this.logger.customError(
+        `Failed to update order ${orderId} status`,
+        error.stack,
+      );
       throw error;
     }
   }

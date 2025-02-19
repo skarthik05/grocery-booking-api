@@ -81,4 +81,12 @@ export const ExampleOrderResponses = {
     status: 'error',
     error: 'Order cannot be cancelled. Only pending orders can be cancelled.',
   },
+  updateOrderStatusSuccess: {
+    status: 'success',
+    message: 'Order status updated successfully',
+  },
+  updateOrderStatusError: {
+    status: 'error',
+    error: 'Cannot update status. Order is not in pending state.',
+  },
 };

@@ -98,4 +98,15 @@ export class OrdersRepository {
       await queryRunner.release();
     }
   }
+
+  async updateOrderStatus(order: Order): Promise<void> {
+    this.logger.log('Updating order status');
+    try {
+      await this.repository.save(order);
+      this.logger.log('Order status updated successfully');
+    } catch (error) {
+      this.logger.error('Error updating order status');
+      throw error;
+    }
+  }
 }

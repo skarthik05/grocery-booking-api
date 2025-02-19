@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -17,7 +18,7 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { ExampleOrderResponses } from './responses/example-order-responses';
-import { ROUTES } from '../constants/app.constants';
+import { APP_CONSTANTS, ROUTES } from '../constants/app.constants';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { IdResponseDto } from 'src/common/dto/api.response.dto';
 import { RedisService } from 'src/common/services/redis/redis.service';
@@ -26,6 +27,7 @@ import { Roles } from 'src/common/decorators/roles.decorator';
 import { ApiCookieAuth } from '@nestjs/swagger';
 import { CancelOrderDto } from './dto/cancel-order.dto';
 import { MessageResponseDto } from 'src/common/dto/api.response.dto';
+import { ApproveOrderDto } from './dto/approve-order.dto';
 @ApiCookieAuth()
 @ApiTags(ROUTES.ORDERS)
 @Controller(ROUTES.ORDERS)
@@ -118,5 +120,30 @@ export class OrdersController {
     @CurrentUser('id') userId: number,
   ): Promise<MessageResponseDto> {
     return this.ordersService.cancelOrder(id, cancelOrderDto, userId);
+  }
+
+  @Patch(':id/status')
+  @ApiOperation({ summary: 'Update order status (Vendor only)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Order status updated successfully',
+    schema: { example: ExampleOrderResponses.updateOrderStatusSuccess },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid order status update',
+    schema: { example: ExampleOrderResponses.updateOrderStatusError },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Order not found',
+    schema: { example: ExampleOrderResponses.findOrderError },
+  })
+  @Roles(APP_CONSTANTS.VENDOR)
+  async updateOrderStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() approveOrderDto: ApproveOrderDto,
+  ): Promise<MessageResponseDto> {
+    return this.ordersService.updateOrderStatus(id, approveOrderDto);
   }
 }

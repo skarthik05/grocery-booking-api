@@ -3,6 +3,7 @@ export const APP_CONSTANTS = {
   DEV_ENV: 'development',
   ADMIN: 'admin',
   USER: 'user',
+  VENDOR: 'vendor',
 };
 export const ROUTES = {
   GROCERIES: 'groceries',
