@@ -14,11 +14,10 @@ import { CreateGroceryDto } from './dto/create-grocery.dto';
 import { UpdateGroceryDto } from './dto/update-grocery.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ExampleResponses } from './responses/example-responses';
-import { APP_CONSTANTS, ROUTES } from '../constants/app.constants';
+import { APP_ROLES, ROUTES, ALL_ROLES } from '../constants/app.constants';
 import { IdResponseDto } from '../common/dto/api.response.dto';
 import { ExistsResponseDto } from '../common/dto/api.response.dto';
 import { Grocery } from 'src/entities/grocery.entity';
-import { ALL_ROLES } from 'src/constants/app.constants';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { ApiCookieAuth } from '@nestjs/swagger';
 
@@ -28,7 +27,7 @@ import { ApiCookieAuth } from '@nestjs/swagger';
 export class GroceriesController {
   constructor(private readonly groceriesService: GroceriesService) {}
 
-  @Roles(APP_CONSTANTS.ADMIN)
+  @Roles(APP_ROLES.ADMIN)
   @Post('elasticsearch/index')
   @ApiResponse({
     status: 200,
@@ -73,7 +72,7 @@ export class GroceriesController {
     return this.groceriesService.searchGroceries(query);
   }
 
-  @Roles(APP_CONSTANTS.ADMIN)
+  @Roles(APP_ROLES.ADMIN)
   @Post()
   @ApiResponse({
     status: 201,
@@ -126,7 +125,7 @@ export class GroceriesController {
     return this.groceriesService.findOne(id);
   }
 
-  @Roles(APP_CONSTANTS.ADMIN)
+  @Roles(APP_ROLES.ADMIN)
   @Patch(':id')
   @ApiResponse({
     status: 200,
@@ -149,7 +148,7 @@ export class GroceriesController {
     return this.groceriesService.update(id, updateGroceryDto);
   }
 
-  @Roles(APP_CONSTANTS.ADMIN)
+  @Roles(APP_ROLES.ADMIN)
   @Delete(':id')
   @ApiResponse({
     status: 200,

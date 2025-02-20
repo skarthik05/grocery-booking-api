@@ -18,7 +18,7 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { ExampleOrderResponses } from './responses/example-order-responses';
-import { APP_CONSTANTS, ROUTES } from '../constants/app.constants';
+import { APP_ROLES, ROUTES } from '../constants/app.constants';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { IdResponseDto } from 'src/common/dto/api.response.dto';
 import { RedisService } from 'src/common/services/redis/redis.service';
@@ -139,7 +139,7 @@ export class OrdersController {
     description: 'Order not found',
     schema: { example: ExampleOrderResponses.findOrderError },
   })
-  @Roles(APP_CONSTANTS.VENDOR)
+  @Roles(APP_ROLES.VENDOR)
   async updateOrderStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body() approveOrderDto: ApproveOrderDto,
