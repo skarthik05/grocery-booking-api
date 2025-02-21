@@ -12,4 +12,7 @@ export class Grocery extends BaseEntity {
 
   @Column(ENTITY_CONSTANTS.GROCERY_QUANTITY)
   quantity: number;
+
+  @Column()
+  image: string;
 }

@@ -1,8 +1,8 @@
 import { Entity, Column, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { ENTITY_CONSTANTS } from 'src/constants/entity.constants';
+import { ENTITY_CONSTANTS } from '../constants/entity.constants';
 import { Order } from './order.entity';
-import { USER_ROLE } from 'src/users/constants/user.constants';
+import { USER_ROLE } from '../users/constants/user.constants';
 
 @Entity(ENTITY_CONSTANTS.TABLE_NAMES.USER)
 export class User extends BaseEntity {

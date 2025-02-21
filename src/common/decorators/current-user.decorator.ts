@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ITokenPayload } from 'src/auth/interface/token-payload.interface';
+import { ITokenPayload } from '../../auth/interface/token-payload.interface';
 export const CurrentUser = createParamDecorator(
   (data: keyof ITokenPayload, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();

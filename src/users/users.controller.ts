@@ -11,12 +11,12 @@ import { ApiTags, ApiResponse, ApiCookieAuth } from '@nestjs/swagger';
 import { UserService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../entities/user.entity';
-import { IdResponseDto } from 'src/common/dto/api.response.dto';
+import { IdResponseDto } from '../common/dto/api.response.dto';
 import { UserResponses } from './responses/user.response';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { APP_ROLES, ROUTES } from '../constants/app.constants';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { Roles } from '../common/decorators/roles.decorator';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @ApiCookieAuth()
 @ApiTags(ROUTES.USERS)

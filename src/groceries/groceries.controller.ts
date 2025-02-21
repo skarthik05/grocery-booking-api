@@ -17,8 +17,8 @@ import { ExampleResponses } from './responses/example-responses';
 import { APP_ROLES, ROUTES, ALL_ROLES } from '../constants/app.constants';
 import { IdResponseDto } from '../common/dto/api.response.dto';
 import { ExistsResponseDto } from '../common/dto/api.response.dto';
-import { Grocery } from 'src/entities/grocery.entity';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { Grocery } from '../entities/grocery.entity';
+import { Roles } from '../common/decorators/roles.decorator';
 import { ApiCookieAuth } from '@nestjs/swagger';
 
 @ApiCookieAuth()

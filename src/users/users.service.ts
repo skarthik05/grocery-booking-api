@@ -5,21 +5,21 @@ import { User } from '../entities/user.entity';
 import {
   IdResponseDto,
   ExistsResponseDto,
-} from 'src/common/dto/api.response.dto';
-import { BcryptUtil } from 'src/utils/bcrypt.util';
+} from '../common/dto/api.response.dto';
+import { BcryptUtil } from '../utils/bcrypt.util';
 import {
   ResourceAlreadyExistsException,
   ResourceNotFoundException,
   InvalidCredentialsException,
-} from 'src/common/exceptions';
+} from '../common/exceptions';
 import {
   IValidateUser,
   ICreateUser,
   ILoginUser,
 } from './interfaces/user.interface';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { CustomLoggerService } from 'src/common/logger/logger.service';
-import { ITokenPayload } from 'src/auth/interface/token-payload.interface';
+import { CustomLoggerService } from '../common/logger/logger.service';
+import { ITokenPayload } from '../auth/interface/token-payload.interface';
 @Injectable()
 export class UserService {
   constructor(

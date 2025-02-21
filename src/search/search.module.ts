@@ -1,8 +1,8 @@
 import { Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ElasticsearchModule } from '@nestjs/elasticsearch';
-import { ENV_KEYS } from 'src/constants/env.constants';
-import { CustomLoggerService } from 'src/common/logger/logger.service';
+import { ENV_KEYS } from '../constants/env.constants';
+import { CustomLoggerService } from '../common/logger/logger.service';
 import { SearchService } from './search.service';
 @Module({
   imports: [

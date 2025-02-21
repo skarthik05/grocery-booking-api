@@ -4,7 +4,7 @@ import { GroceriesService } from './groceries.service';
 import { GroceriesController } from './groceries.controller';
 import { GroceriesRepository } from './groceries.repository';
 import { Grocery } from '../entities/grocery.entity';
-import { SearchModule } from 'src/search/search.module';
+import { SearchModule } from '../search/search.module';
 @Module({
   imports: [TypeOrmModule.forFeature([Grocery]), SearchModule],
   controllers: [GroceriesController],

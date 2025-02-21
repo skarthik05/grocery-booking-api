@@ -3,20 +3,20 @@ import { CreateOrderDto, CreateOrderItemDto } from './dto/create-order.dto';
 import { Order } from '../entities/order.entity';
 import { OrderItem } from '../entities/order-item.entity';
 import { OrdersRepository } from './orders.repository';
-import { User } from 'src/entities/user.entity';
-import { Grocery } from 'src/entities/grocery.entity';
-import { IdResponseDto } from 'src/common/dto/api.response.dto';
+import { User } from '../entities/user.entity';
+import { Grocery } from '../entities/grocery.entity';
+import { IdResponseDto } from '../common/dto/api.response.dto';
 import {
   InsufficientStockException,
   ResourceNotFoundException,
   InvalidDataException,
-} from 'src/common/exceptions';
-import { GroceriesRepository } from 'src/groceries/groceries.repository';
-import { CustomLoggerService } from 'src/common/logger/logger.service';
-import { RedisService } from 'src/common/services/redis/redis.service';
+} from '../common/exceptions';
+import { GroceriesRepository } from '../groceries/groceries.repository';
+import { CustomLoggerService } from '../common/logger/logger.service';
+import { RedisService } from '../common/services/redis/redis.service';
 import { ORDER_STATUS } from './constants/order.constants';
 import { CancelOrderDto } from './dto/cancel-order.dto';
-import { MessageResponseDto } from 'src/common/dto/api.response.dto';
+import { MessageResponseDto } from '../common/dto/api.response.dto';
 import { ApproveOrderDto } from './dto/approve-order.dto';
 @Injectable()
 export class OrdersService {

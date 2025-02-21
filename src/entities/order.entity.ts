@@ -3,7 +3,7 @@ import { OrderItem } from './order-item.entity';
 import { BaseEntity } from './base.entity';
 import { User } from './user.entity';
 import { ENTITY_CONSTANTS } from '../constants/entity.constants';
-import { ORDER_STATUS } from 'src/orders/constants/order.constants';
+import { ORDER_STATUS } from '../orders/constants/order.constants';
 
 @Entity(ENTITY_CONSTANTS.TABLE_NAMES.ORDER)
 export class Order extends BaseEntity {

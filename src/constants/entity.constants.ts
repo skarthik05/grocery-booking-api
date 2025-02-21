@@ -1,5 +1,5 @@
-import { ORDER_STATUS } from 'src/orders/constants/order.constants';
-import { USER_ROLE } from 'src/users/constants/user.constants';
+import { ORDER_STATUS } from '../orders/constants/order.constants';
+import { USER_ROLE } from '../users/constants/user.constants';
 import { ColumnOptions } from 'typeorm';
 
 export const ENTITY_CONSTANTS = {

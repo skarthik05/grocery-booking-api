@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { Request } from 'express';
 import { UserService } from '../users/users.service';
 import { ITokenPayload } from './interface/token-payload.interface';
-import { ENV_KEYS } from 'src/constants/env.constants';
+import { ENV_KEYS } from '../constants/env.constants';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(

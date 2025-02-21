@@ -19,14 +19,14 @@ import {
 } from '@nestjs/swagger';
 import { ExampleOrderResponses } from './responses/example-order-responses';
 import { APP_ROLES, ROUTES } from '../constants/app.constants';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { IdResponseDto } from 'src/common/dto/api.response.dto';
-import { RedisService } from 'src/common/services/redis/redis.service';
-import { ALL_ROLES } from 'src/constants/app.constants';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { IdResponseDto } from '../common/dto/api.response.dto';
+import { RedisService } from '../common/services/redis/redis.service';
+import { ALL_ROLES } from '../constants/app.constants';
+import { Roles } from '../common/decorators/roles.decorator';
 import { ApiCookieAuth } from '@nestjs/swagger';
 import { CancelOrderDto } from './dto/cancel-order.dto';
-import { MessageResponseDto } from 'src/common/dto/api.response.dto';
+import { MessageResponseDto } from '../common/dto/api.response.dto';
 import { ApproveOrderDto } from './dto/approve-order.dto';
 @ApiCookieAuth()
 @ApiTags(ROUTES.ORDERS)

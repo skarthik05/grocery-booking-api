@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { UserService } from 'src/users/users.service';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { UserService } from './users/users.service';
+import { CurrentUser } from './common/decorators/current-user.decorator';
 import { ApiCookieAuth } from '@nestjs/swagger';
 
 @ApiCookieAuth()

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
-import { CustomLoggerService } from 'src/common/logger/logger.service';
-import { ENV_KEYS } from 'src/constants/env.constants';
-import { Grocery } from 'src/entities/grocery.entity';
+import { CustomLoggerService } from '../common/logger/logger.service';
+import { ENV_KEYS } from '../constants/env.constants';
+import { Grocery } from '../entities/grocery.entity';
 
 @Injectable()
 export class SearchService {

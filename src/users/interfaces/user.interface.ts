@@ -1,4 +1,4 @@
-import { USER_ROLE } from 'src/users/constants/user.constants';
+import { USER_ROLE } from '../constants/user.constants';
 
 export interface IValidateUser {
   email: string;

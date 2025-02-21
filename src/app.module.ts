@@ -2,10 +2,8 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from './datasource/typeorm.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ENV_KEYS } from './constants/env.constants';
-import { APP_CONSTANTS } from './constants/app.constants';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { GroceriesModule } from './groceries/groceries.module';
 import { OrdersModule } from './orders/orders.module';
 import { LoggerModule } from './common/logger/logger.module';
@@ -14,26 +12,23 @@ import { AuthModule } from './auth/auth.module';
 import JwtAuthGuard from './auth/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { SearchModule } from './search/search.module';
-const getEnvFilePath = (configService: ConfigService): string => {
-  switch (configService.get(ENV_KEYS.NODE_ENV)) {
-    case APP_CONSTANTS.PROD_ENV:
-      return '.env.production';
-    case APP_CONSTANTS.DEV_ENV:
-      return '.env.development';
-    default:
-      return '.env';
-  }
-};
+import { APP_ENV } from './constants/app.constants';
+import { typeOrmConfig } from './config/typeorm.config';
 
+console.log(process.env.NODE_ENV);
 @Module({
-  imports: [
-    TypeOrmModule,
+    imports: [
+    TypeOrmModule.forRoot(typeOrmConfig),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        () => ({
-          envFilePath: getEnvFilePath(new ConfigService()),
-        }),
+      envFilePath: [
+        '.env',
+        ...(process.env.NODE_ENV === APP_ENV.DEV_ENV
+          ? ['.env.development']
+          : []),
+        ...(process.env.NODE_ENV === APP_ENV.PROD_ENV
+          ? ['.env.production']
+          : []),
       ],
     }),
     GroceriesModule,

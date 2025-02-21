@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { RedisOptions } from 'ioredis';
-import { ENV_KEYS } from 'src/constants/env.constants';
+import { ENV_KEYS } from '../../../constants/env.constants';
 
 export class RedisConfig {
   constructor(private readonly configService: ConfigService) {}

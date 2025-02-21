@@ -7,10 +7,10 @@ import { ExistsResponseDto } from '../common/dto/api.response.dto';
 import {
   ResourceAlreadyExistsException,
   ResourceNotFoundException,
-} from 'src/common/exceptions';
+} from '../common/exceptions';
 import { CustomLoggerService } from '../common/logger/logger.service';
 import { IdResponseDto } from '../common/dto/api.response.dto';
-import { SearchService } from 'src/search/search.service';
+import { SearchService } from '../search/search.service';
 @Injectable()
 export class GroceriesService {
   constructor(

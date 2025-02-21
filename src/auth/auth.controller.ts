@@ -1,11 +1,11 @@
 import { Controller, Post, Body, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signin-auth.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { Response } from 'express';
-import { Public } from 'src/common/decorators/public.decorator';
+import { Public } from '../common/decorators/public.decorator';
 import { ApiTags } from '@nestjs/swagger';
-import { ROUTES } from 'src/constants/app.constants';
+import { ROUTES } from '../constants/app.constants';
 
 @ApiTags(ROUTES.AUTH)
 @Controller(ROUTES.AUTH)

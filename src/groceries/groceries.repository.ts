@@ -3,8 +3,8 @@ import { ILike, In, QueryRunner, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Grocery } from '../entities/grocery.entity';
 import { CreateGroceryDto } from './dto/create-grocery.dto';
-import { OrderItem } from 'src/entities/order-item.entity';
-import { CustomLoggerService } from 'src/common/logger/logger.service';
+import { OrderItem } from '../entities/order-item.entity';
+import { CustomLoggerService } from '../common/logger/logger.service';
 @Injectable()
 export class GroceriesRepository {
   constructor(

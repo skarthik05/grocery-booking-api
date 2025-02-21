@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { SignInDto } from './dto/signin-auth.dto';
-import { UserService } from 'src/users/users.service';
-import { CustomLoggerService } from 'src/common/logger/logger.service';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { UserService } from '../users/users.service';
+import { CustomLoggerService } from '../common/logger/logger.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ITokenPayload } from './interface/token-payload.interface';
-import { IdResponseDto } from 'src/common/dto/api.response.dto';
+import { IdResponseDto } from '../common/dto/api.response.dto';
 @Injectable()
 export class AuthService {
   constructor(

@@ -2,7 +2,7 @@ import { FindOptionsWhere, Not, Repository, UpdateResult } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { IdResponseDto } from 'src/common/dto/api.response.dto';
+import { IdResponseDto } from '../common/dto/api.response.dto';
 import { ICreateUser, IValidateUser } from './interfaces/user.interface';
 
 export class UserRepository {
