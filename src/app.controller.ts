@@ -11,6 +11,10 @@ export class AppController {
     private readonly appService: AppService,
     private readonly userService: UserService,
   ) {}
+  @Get('/health')
+  getHealth() {
+    return { status: 'OK' };
+  }
 
   @Get('me')
   getMe(@CurrentUser('id') id: number) {
