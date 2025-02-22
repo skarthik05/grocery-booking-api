@@ -1,0 +1,85 @@
+services:
+  api:
+    build:
+      context: .
+      target: builder
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - grocery_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    command: npm run start:dev
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    
+  postgres:
+    image: postgres:15-alpine
+    env_file:
+      - .env
+    ports:
+      - "${DATABASE_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - grocery_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DATABASE_USER}" ]
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - grocery_network
+    command: redis-server --appendonly yes ${REDIS_PASSWORD:+--requirepass ${REDIS_PASSWORD}}
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
+    ports:
+      - "${ELASTICSEARCH_PORT:-9200}:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - grocery_network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -vq '\"status\":\"red\"'" ]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:
+  elasticsearch_data:
+
+
+networks:
+  grocery_network:
+    driver: bridge

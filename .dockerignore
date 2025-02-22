@@ -1,0 +1,59 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Dependencies
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Environment
+.env
+.env.*
+!.env.production
+
+# Build outputs
+dist
+build
+coverage
+
+# Development files
+.vscode
+.idea
+*.md
+test
+jest.config.js
+.eslintrc
+.prettierrc
+.editorconfig
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Logs
+logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# TypeScript source maps
+*.map
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Debug files
+.npm
+.eslintcache 
