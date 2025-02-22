@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './users.repository';
-import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '../entities/user.entity';
 import {
   IdResponseDto,
@@ -44,7 +43,7 @@ export class UserService {
     }
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<IdResponseDto> {
+  async createUser(createUserDto: ICreateUser): Promise<IdResponseDto> {
     this.logger.log(`Creating user with email: ${createUserDto.email}`);
     try {
       const salt = await this.bcryptUtil.generateSalt();
@@ -141,5 +140,8 @@ export class UserService {
       this.logger.customError('Failed to validate user credentials', error);
       throw error;
     }
+  }
+  async findByEmail(email: string): Promise<User> {
+    return this.userRepository.findByEmail(email);
   }
 }
