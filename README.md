@@ -57,6 +57,8 @@ The Grocery Booking API is a NestJS-based application designed to manage grocery
    ELASTICSEARCH_PASSWORD=""
    ELASTICSEARCH_TYPE='single-node'
    NODE_ENV=local
+   ADMIN_EMAIL=admin@gmail.com
+   ADMIN_PASSWORD=admin123
    ```
 
 3. Start the application using Docker Compose:
