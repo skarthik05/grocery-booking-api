@@ -14,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
 import JwtAuthGuard from './auth/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { SearchModule } from './search/search.module';
+import { SeederService } from './seeder/seeder.service';
 const getEnvFilePath = (configService: ConfigService): string => {
   switch (configService.get(ENV_KEYS.NODE_ENV)) {
     case APP_ENV.PROD_ENV:
@@ -54,6 +55,7 @@ const getEnvFilePath = (configService: ConfigService): string => {
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    SeederService,
   ],
 })
 export class AppModule {}
